@@ -11,15 +11,15 @@ var getCurrentPosition = function() {
 		console.log(text);
 		map.style.display = 'block';
 
-		var mapwidth = 270; // a mungy compromise between the 2 sizes 
-		var mapheight = 210; // since we can't get w / h dynamically 
-		map.src = "http://maps.googleapis.com/maps/api/staticmap?center=" + 
-
-		pos.coords.latitude + "," + 
-		pos.coords.longitude + 
-		"&zoom=14&size=" + mapwidth + "x" + mapheight + "&maptype=roadmap&markers=color:green%7C" +
-		pos.coords.latitude + "," +
-		pos.coords.longitude + "&sensor=false";
+		var mapwidth = 270; 
+		var mapheight = 210; 
+		var key = "AIzaSyARWwL4grkK_PgfLZg904DRNwfXmW0G_ks";
+		map.src = 
+		"http://maps.googleapis.com/maps/api/staticmap?center=" + 
+		pos.coords.latitude + "," + pos.coords.longitude + 
+		"&zoom=13&size=" + mapwidth + "x" + mapheight + "&maptype=satellite&markers=color:green%7C" +
+		pos.coords.latitude + "," + pos.coords.longitude  +
+		"&key=" + key;
 	};
 
 	var fail = function(error) {
@@ -63,14 +63,15 @@ var wsuccess = function(pos) {
 	console.log(text); 
 	map.style.display = 'block';
 
-	var mapwidth = 270; // a mungy compromise between the 2 sizes 
-	var mapheight = 210; // since we can't get w / h dynamically 
+	var mapwidth = 270; 
+	var mapheight = 210; 
+	var key = "AIzaSyARWwL4grkK_PgfLZg904DRNwfXmW0G_ks";
 	map.src = 
 	"http://maps.googleapis.com/maps/api/staticmap?center=" + 
-	pos.coords.latitude + 
-	"," + pos.coords.longitude + 
-	"&zoom=13&size=" + mapwidth + "x" + mapheight + "&maptype=roadmap&markers=color:green%7C" +
-	pos.coords.latitude + "," + pos.coords.longitude + "&sensor=false";
+	pos.coords.latitude + "," + pos.coords.longitude + 
+	"&zoom=13&size=" + mapwidth + "x" + mapheight + "&maptype=satellite&markers=color:green%7C" +
+	pos.coords.latitude + "," + pos.coords.longitude +
+	"&key=" + key;
 
 };
 
