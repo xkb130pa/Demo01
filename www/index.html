@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="generator"
+    content="HTML Tidy for HTML5 (experimental) for Windows https://github.com/w3c/tidy-html5/tree/c63cc39" />
+    <meta name="viewport" content="width=320; user-scalable=no" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <title>Minimal AppLaud App</title>
+    <link rel="styleSheet" href="css/index.css" />
+    <script type="text/javascript" charset="utf-8" src="phonegap-1.4.1.js"></script>
+  </head>
+  
+  <body>
+  
+  <h2>Geolocation</h2>
+  
+  <blockquote>
+    <p>The <code>geolocation</code> object provides access to the device&#39;s GPS sensor.</p>
+  </blockquote>
+  
+  <h4 class="help">
+   <b>Toggle</b> to stop/start geolocation watch.
+   <br />
+  <b>Update</b> for one-time geolocation reading.</h4>
+  
+  <div onclick="toggleWatchPosition();" style="background-color:green; margin:20px; padding:6px; width:100px;">Toggle</div>
+  
+  <div onclick="getCurrentPosition();" style="background-color:orange; margin:20px; padding:6px; width:100px;">Update</div>
+  
+  <div class="result-block">
+    <span id="cur_position"></span>
+  </div>
+  
+  <img id="map" alt="Location Map" /> 
+  
+  <script src="js/geolocation.js"></script>
+  
+  </body>
+
+  </html>
