@@ -6,38 +6,116 @@
     <meta name="viewport" content="width=320; user-scalable=no" />
     <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
     <title>Minimal Geolocation App</title>
-	
+    <link rel="stylesheet" href="css/jquery.mobile-1.1.0-rc.2.min.css" />
     <link rel="styleSheet" href="css/index.css" />
     <script type="text/javascript" charset="utf-8" src="phonegap-1.4.1.js"></script>
-	
-	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0-rc.2/jquery.mobile-1.1.0-rc.2.min.css" />
-	<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
-	<script src="http://code.jquery.com/mobile/1.1.0-rc.2/jquery.mobile-1.1.0-rc.2.min.js"></script>
-	
+    <script src="js/jquery-1.7.1.min.js"></script>
+    <script src="js/jquery.mobile-1.1.0-rc.2.min.js"></script>
+    <script src="js/geolocation.js"></script>
+    <style>
+        body {
+        background-color: black;
+        color:white;
+        }
+        #Header {
+                 width:100%;
+                 position:absolute;
+                 top:0;
+                 left:0;
+                 height:40px;
+         padding:12px;
+         font-size:medium;
+         text-align:center;
+         background-color: black;
+         color:white;
+                 vertical-align:middle;
+        }
+        #Footer {
+                 width:100%;
+                 height:40px;
+                 position:absolute;
+                 bottom:0;
+                 left:0;
+                 padding:12px;
+         font-size:medium;
+         text-align:center;
+         background-color: black;
+         color:white;
+                 vertical-align:middle;
+                }
+         #Content {
+                 padding-top:60px;   /* Height of the header element */
+                 padding-bottom:60px;   /* Height of the footer element */
+                }
+        #Directions {
+         margin-top:12px;
+         margin-bottom:12px;
+         padding-left:50px;
+         padding-right:50px;
+                }
+        span {
+                font-weight:normal;
+                }
+        #Code {
+        background-color:lightblue;
+                display:inline-block;
+        }
+                
+        #Button {
+        background-color:blue;
+        padding:12px;
+                font-weight:bold;
+                }
+                
+        #Coordinates {
+        /*color:white;
+        background-color:gray;*/
+        padding:12px;
+                font-weight:bold;
+        }
+                
+                #ResponseBlock {
+                 width=100%;
+                 visibility:hidden;
+                }
+                #Response {
+        margin:12px;
+        padding:6px;            
+                color:white;
+                background-color:green;
+                text-align:center;
+        font-size:medium;
+                font-weight:normal;
+                }
+                #ResponseText {
+                padding:12px;
+                }
+        
+</style>
   </head>
-  
-  <body style="padding:4px;">
-  
-  <h2>Geolocation</h2>
-    
-  <p>Simple demonstration which pulls the device&#39;s GPS coordinates</p>
-    
-  <table cellspacing=0 style="width:100%; border:none;">
-   <tr><td style="width:50%; border:none;">
-    <button type="button" onclick="toggleWatchPosition();" style="background-color:green;padding:12px;">Toggle Live Updates</button> 
-   </td><td style="width:50%;border:none;">
-    <button type="button" onclick="getCurrentPosition();" style="background-color:orange; padding:12px;">Update Once</button> 
-   </td></tr>
-  </table>
-  
-  <div class="result-block">
-    <span id="cur_position"></span>
-  </div>
-  
-  <img id="map" alt="Location Map" /> 
-  
-  <script src="js/geolocation.js"></script>
-  
+  <body>
+    <div id="Header">
+      <h3>Proximity Scanner</h3>
+    </div>
+    <div id="Content">
+      <p id="Directions">Please enter your system code and then press Scan.</p>
+      <div style="width:100%; text-align:center; padding:20px;">
+        <span style="font-weight:bold;">System Code</span> 
+        <input id="Code" style="width:10em;" />
+	  </div>
+      <div id="ResponseBlock">
+        <div id="Coordinates" style="text-align:center;">Latitude: 
+        <span id="Latitude">pending</span>,&nbsp; Longitude: 
+        <span id="Longitude">pending</span>,&nbsp; Accuracy: 
+        <span id="Accuracy">pending</span></div>
+        <h2 id="Response">Waiting...</h2>
+        <p id="ResponseText"></p>
+      </div>
+      <button id="Button" class="ui-btn ui-btn-inline" onclick="ScanCallback();">Scan</button>
+      <img id="map" alt="Location Map" />
+    </div>
+    <div id="Footer">
+      <span id="Status">Status bar</span>
+    </div>
   </body>
-
-  </html>
+</html>
