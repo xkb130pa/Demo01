@@ -1,25 +1,51 @@
-var getCurrentPosition = function() {
+var ScanCallback = function() {
 
-	var map = document.getElementById('map');
 
 	var success = function(pos) { 
-		var text = "<div>Latitude: " + pos.coords.latitude + 
-		 "<br/>" + "Longitude: " + pos.coords.longitude + "<br/>" + 
-		 "Accuracy: " + pos.coords.accuracy + "m<br/>" + "</div>";
+		jQuery.support.cors = true;
+		jQuery.ajaxSetup({ async: false });
 
-		document.getElementById('cur_position').innerHTML = text;
-		console.log(text);
-		map.style.display = 'block';
+		var code = $("#Code").val();
+		var latitude = pos.coords.latitude;
+		var longitude = pos.coords.longitude;
+		var accuracy = pos.coords.accuracy;
+			
+		$("#Status").html("Coordinates retrieved...");
 
+		$("#ResponseBlock").css("visibility","visible");		
+		$("#Latitude").html(latitude);
+		$("#Longitude").html(longitude);
+		$("#Accuracy").html(accuracy);
+			
+		// Compose the data feed URL
+		var URL = 'http://proximityscanner.com/Functions.svc/GetFunctionResponseList' +
+			'?Code=' + code +
+			'&Latitude=' + latitude +
+			'&Longitude=' + longitude;
+
+		// Query the data and populate the table
+		$.getJSON(URL)
+			.done(function (data) {
+				var response = data.CheckLocation;
+				$("#Status").html(response);
+				$("#Response").html("There are no Cortese sites with 1000ft");
+			})
+			.fail(function (jqxhr, textStatus, error) {
+				var err = textStatus + ", " + error;
+				$("#Status").html("Request Failed:" + err)
+        });
+
+		var map = $("#map");
+		//map.css("display","block");
 		var mapwidth = 270; 
 		var mapheight = 210; 
 		var key = "AIzaSyARWwL4grkK_PgfLZg904DRNwfXmW0G_ks";
 		map.src = 
-		"http://maps.googleapis.com/maps/api/staticmap?center=" + 
-		pos.coords.latitude + "," + pos.coords.longitude + 
-		"&zoom=13&size=" + mapwidth + "x" + mapheight + "&maptype=satellite&markers=color:green%7C" +
-		pos.coords.latitude + "," + pos.coords.longitude  +
-		"&key=" + key;
+		 "http://maps.googleapis.com/maps/api/staticmap?center=" + 
+		 pos.coords.latitude + "," + pos.coords.longitude + 
+		 "&zoom=13&size=" + mapwidth + "x" + mapheight + "&maptype=satellite&markers=color:green%7C" +
+		 pos.coords.latitude + "," + pos.coords.longitude  +
+		 "&key=" + key;
 	};
 
 	var fail = function(error) {
@@ -28,9 +54,8 @@ var getCurrentPosition = function() {
 		console.log("Error getting geolocation: code=" + error.code + " message=" + error.message);
 	};
 
-	map.style.display = 'none';
-	document.getElementById('cur_position').innerHTML = "Getting geolocation . . .";
-	console.log("Getting geolocation . . .");
+	//map.css("display","none");
+	$("#Status").html("Retrieving Geolocation from your device...");
 	navigator.geolocation.getCurrentPosition(success, fail);
 };
 
@@ -53,16 +78,7 @@ function clearWatch() {
 var wsuccess = function(pos) { 
 
 	var map = document.getElementById('map');
-	document.getElementById('cur_position').innerHTML = "Watching geolocation . . .";
-	map.style.display = 'none';
-
-	var text = "<div>Latitude: " + pos.coords.latitude + 
-	 " (watching)<br/>" + "Longitude: " + pos.coords.longitude + "<br/>" + 
-	 "Accuracy: " + pos.coords.accuracy + "m<br/>" + "</div>";
-	document.getElementById('cur_position').innerHTML = text;
-	console.log(text); 
 	map.style.display = 'block';
-
 	var mapwidth = 270; 
 	var mapheight = 210; 
 	var key = "AIzaSyARWwL4grkK_PgfLZg904DRNwfXmW0G_ks";
