@@ -107,7 +107,7 @@ var ScanCallback = function() {
 	
 	$("#Status").html("Retrieving Geolocation from your device...");
 	navigator.geolocation.getCurrentPosition(success, fail,
-	  {maximumAge:300000, timeout:10000, enableHighAccuracy: true});
+	  {maximumAge:0, timeout:15000, enableHighAccuracy: true});
 };
 
 // Capture pressing the GO button
