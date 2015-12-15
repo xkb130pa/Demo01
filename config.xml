@@ -1,6 +1,6 @@
 <widget xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0" id="com.phonegap.helloworld" version="1.0.0">
-  <name>ProximityScanner</name>
-  <description>Scan For Nearest Site</description>
+  <name>Proximity Scanner</name>
+  <description>Scan For the Nearest Site</description>
   <author href="http://ProximityScanner.com" email="support@ProximityScanner.com">CH2M</author>
   <content src="index.html"/>
   <preference name="permissions" value="none"/>
@@ -36,7 +36,7 @@
   <gap:plugin name="org.apache.cordova.network-information"/>
   <gap:plugin name="org.apache.cordova.splashscreen"/>
   <gap:plugin name="org.apache.cordova.vibration"/> -->
-  <icon src="icon.png"/>
+  <icon src="www/img/logo.png"/>
   <icon src="www/res/icon/android/icon-36-ldpi.png" gap:platform="android" gap:qualifier="ldpi"/>
   <icon src="www/res/icon/android/icon-48-mdpi.png" gap:platform="android" gap:qualifier="mdpi"/>
   <icon src="www/res/icon/android/icon-72-hdpi.png" gap:platform="android" gap:qualifier="hdpi"/>
