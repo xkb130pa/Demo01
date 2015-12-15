@@ -54,35 +54,35 @@ var ScanCallback = function() {
 				if (zone==5) { 
 				 $("#Response").html("NO"); 
 				 $("#Response").css("background-color","#508a55");	
-				 $("#Button").removeClass("Z0").removeClass("Z1").removeClass("Z2").removeClass("Z3").removeClass("Z4").addClass("Z3");				
+				 $("#Button").removeClass("Z0").removeClass("Z1").removeClass("Z2").removeClass("Z3").removeClass("Z4").addClass("Z5");				
 				 $("#ResponseDescription").html("There are no Cortese sites nearby.  The closest site is over one mile away."); 
 				 $("#Status").html("Scan Completed");					 
 				}
 				else if (zone==4) {
 				 $("#Response").html("NO"); 
 				 $("#Response").css("background-color","#87b388");		
-				 $("#Button").removeClass("Z0").removeClass("Z1").removeClass("Z2").removeClass("Z3").addClass("Z4").removeClass("Z3");				
-				 $("#ResponseDescription").html("The nearest Cortese site is between 1000 and one mile from your location"); 
+				 $("#Button").removeClass("Z0").removeClass("Z1").removeClass("Z2").removeClass("Z3").addClass("Z4").removeClass("Z5");				
+				 $("#ResponseDescription").html("The nearest Cortese site is between 1000 feet and one mile from your location"); 
 				 $("#Status").html("Scan Completed");					 
 				}
 				else if (zone==3) {
 				 $("#Response").html("NO"); 
 				 $("#Response").css("background-color","#87b388");
-				 $("#Button").removeClass("Z0").removeClass("Z1").removeClass("Z2").addClass("Z3").removeClass("Z4").removeClass("Z3");				
+				 $("#Button").removeClass("Z0").removeClass("Z1").removeClass("Z2").addClass("Z3").removeClass("Z4").removeClass("Z5");				
 				 $("#ResponseDescription").html("The nearest Cortese site is between 500 and 1000 feet from your location"); 
 				 $("#Status").html("Scan Completed");					 
 				}
 				else if (zone==2) {
 				 $("#Response").html("NO"); 
 				 $("#Response").css("background-color","#87b388");
-				 $("#Button").removeClass("Z0").removeClass("Z1").addClass("Z2").removeClass("Z3").removeClass("Z4").removeClass("Z3");				
+				 $("#Button").removeClass("Z0").removeClass("Z1").addClass("Z2").removeClass("Z3").removeClass("Z4").removeClass("Z5");				
 				 $("#ResponseDescription").html("The nearest Cortese site is between 100 and 500 feet from your location"); 
 				 $("#Status").html("Scan Completed");	
 				}
 				else if (zone==1) {
 				 $("#Response").html("YES"); 
 				 $("#Response").css("background-color","red");
-				 $("#Button").removeClass("Z0").addClass("Z1").removeClass("Z2").removeClass("Z3").removeClass("Z4").removeClass("Z3");				
+				 $("#Button").removeClass("Z0").addClass("Z1").removeClass("Z2").removeClass("Z3").removeClass("Z4").removeClass("Z5");				
 				 $("#ResponseDescription").html("There is a Cortese site within 100 feet of your location."); 
 				 $("#Status").html("Scan Completed");	
 				}
@@ -90,7 +90,7 @@ var ScanCallback = function() {
 				 if (response="Invalid Security Code") { $("#Security").css("visibility","visible"); }
 				 $("#ResponseBlock").css("visibility","hidden");
 				 $("#ResponseDescription").html("");				 
-				 $("#Button").addClass("Z0").removeClass("Z1").removeClass("Z2").removeClass("Z3").removeClass("Z4").removeClass("Z3");				
+				 $("#Button").addClass("Z0").removeClass("Z1").removeClass("Z2").removeClass("Z3").removeClass("Z4").removeClass("Z5");				
 				 $("#Status").html(response);				 
 				}
 			    $("#ResponseTime").html("Last Checked " + responsetime); 
@@ -109,6 +109,13 @@ var ScanCallback = function() {
 	navigator.geolocation.getCurrentPosition(success, fail);
 };
 
+// Capture pressing the GO button
+$('#Code').keypress(function(e) {
+            var key = (e.keyCode ? e.keyCode : e.which);
+            if ( (key==13) || (key==10)) { ScanCallback(); }
+});
+    
+		
 /*
 document.addEventListener("deviceready", onDeviceReady, false);
 function onDeviceReady() {
