@@ -1,6 +1,5 @@
 var ScanCallback = function() {
 
-
 	var success = function(pos) { 
 		jQuery.support.cors = true;
 		jQuery.ajaxSetup({ async: false });
@@ -9,106 +8,143 @@ var ScanCallback = function() {
 		var latitude = pos.coords.latitude;
 		var longitude = pos.coords.longitude;
 		var accuracy = pos.coords.accuracy;
-			
+		
 		$("#Status").html("Coordinates retrieved...");
 
-		$("#ResponseBlock").css("visibility","visible");		
-		$("#Latitude").html(latitude);
-		$("#Longitude").html(longitude);
+		$("#Coordinates").css("visibility","visible");		
+		$("#Latitude").html(Math.round(1000*latitude)/1000);
+		$("#Longitude").html(Math.round(1000*longitude)/1000);
 		$("#Accuracy").html(accuracy);
+		
+		// Store code for use next time
+		//window.localStorage.setItem("code", code);
+		
+		scanProximity(code,latitude,longitude);
+    };
 			
+	var fail = function(error) {
+		$("#Coordinates").css("visibility","hidden");		
+		$("#Status").html("Error getting geolocation: " + error.message);
+	};
+	
+	var scanProximity = function (code,latitude,longitude) {
+	
 		// Compose the data feed URL
-		var URL = 'http://proximityscanner.com/Functions.svc/GetFunctionResponseList' +
-			'?Code=' + code +
-			'&Latitude=' + latitude +
-			'&Longitude=' + longitude;
+		var URL = 'http://proximityscanner.com/Functions.svc/CheckProximity' +
+        '?Code=' + code +
+        '&Latitude=' + latitude +
+        '&Longitude=' + longitude +
+        '&Timestamp=' + Date.now();			
 
 		// Query the data and populate the table
 		$.getJSON(URL)
 			.done(function (data) {
-				var response = data.CheckLocation;
-				$("#Status").html(response);
-				$("#Response").html("There are no Cortese sites with 1000ft");
+			    var response = data.Message;
+				var distance = data.Distance;
+				var site = data.Site;
+				var zone=data.Zone;
+				
+				var timestamp = new Date();
+				var responsetime = format_date(timestamp) + ' ' + format_time(timestamp);
+				 
+
+				$("#ResponseBlock").css("visibility","visible");
+				$("#Security").css("visibility","hidden");
+			
+				if (zone==5) { 
+				 $("#Response").html("NO"); 
+				 $("#Response").css("background-color","#508a55");	
+				 $("#Button").removeClass("Z0").removeClass("Z1").removeClass("Z2").removeClass("Z3").removeClass("Z4").addClass("Z3");				
+				 $("#ResponseDescription").html("There are no Cortese sites nearby.  The closest site is over one mile away."); 
+				 $("#Status").html("Scan Completed");					 
+				}
+				else if (zone==4) {
+				 $("#Response").html("NO"); 
+				 $("#Response").css("background-color","#87b388");		
+				 $("#Button").removeClass("Z0").removeClass("Z1").removeClass("Z2").removeClass("Z3").addClass("Z4").removeClass("Z3");				
+				 $("#ResponseDescription").html("The nearest Cortese site is between 1000 and one mile from your location"); 
+				 $("#Status").html("Scan Completed");					 
+				}
+				else if (zone==3) {
+				 $("#Response").html("NO"); 
+				 $("#Response").css("background-color","#87b388");
+				 $("#Button").removeClass("Z0").removeClass("Z1").removeClass("Z2").addClass("Z3").removeClass("Z4").removeClass("Z3");				
+				 $("#ResponseDescription").html("The nearest Cortese site is between 500 and 1000 feet from your location"); 
+				 $("#Status").html("Scan Completed");					 
+				}
+				else if (zone==2) {
+				 $("#Response").html("NO"); 
+				 $("#Response").css("background-color","#87b388");
+				 $("#Button").removeClass("Z0").removeClass("Z1").addClass("Z2").removeClass("Z3").removeClass("Z4").removeClass("Z3");				
+				 $("#ResponseDescription").html("The nearest Cortese site is between 100 and 500 feet from your location"); 
+				 $("#Status").html("Scan Completed");	
+				}
+				else if (zone==1) {
+				 $("#Response").html("YES"); 
+				 $("#Response").css("background-color","red");
+				 $("#Button").removeClass("Z0").addClass("Z1").removeClass("Z2").removeClass("Z3").removeClass("Z4").removeClass("Z3");				
+				 $("#ResponseDescription").html("There is a Cortese site within 100 feet of your location."); 
+				 $("#Status").html("Scan Completed");	
+				}
+				else{
+				 if (response="Invalid Security Code") { $("#Security").css("visibility","visible"); }
+				 $("#ResponseBlock").css("visibility","hidden");
+				 $("#ResponseDescription").html("");				 
+				 $("#Button").addClass("Z0").removeClass("Z1").removeClass("Z2").removeClass("Z3").removeClass("Z4").removeClass("Z3");				
+				 $("#Status").html(response);				 
+				}
+			    $("#ResponseTime").html("Last Checked " + responsetime); 
 			})
 			.fail(function (jqxhr, textStatus, error) {
-				var err = textStatus + ", " + error;
-				$("#Status").html("Request Failed:" + err)
-        });
-
-		var map = $("#map");
-		//map.css("display","block");
-		var mapwidth = 270; 
-		var mapheight = 210; 
-		var key = "AIzaSyARWwL4grkK_PgfLZg904DRNwfXmW0G_ks";
-		map.src = 
-		 "http://maps.googleapis.com/maps/api/staticmap?center=" + 
-		 pos.coords.latitude + "," + pos.coords.longitude + 
-		 "&zoom=13&size=" + mapwidth + "x" + mapheight + "&maptype=satellite&markers=color:green%7C" +
-		 pos.coords.latitude + "," + pos.coords.longitude  +
-		 "&key=" + key;
-	};
-
-	var fail = function(error) {
-		document.getElementById(
-		'cur_position').innerHTML = "Error getting geolocation: " + error.code;
-		console.log("Error getting geolocation: code=" + error.code + " message=" + error.message);
-	};
-
-	//map.css("display","none");
+				$("#Security").css("visibility","visible");
+				$("#ResponseDescription").html("");
+				$("#ResponseBlock").css("visibility","hidden");
+				$("#Status").html(error)
+			    $("#ResponseTime").html("Last Checked " + responsetime); 				
+			});
+	}
+	
+	
 	$("#Status").html("Retrieving Geolocation from your device...");
 	navigator.geolocation.getCurrentPosition(success, fail);
 };
 
-// api-geolocation Watch Position
-var watchID = null; 
+/*
+document.addEventListener("deviceready", onDeviceReady, false);
+function onDeviceReady() {
+   var code = window.localStorage.getItem("code");
+   $("#Code").val(code);
+ }
+*/
 
-function clearWatch() { 
+$(document).ready(function(){   
+    var bodyHeight = $(document).height();
+    var headerHeight = $("#Header").height()
+	var footerHeight = $("#Status").height();
+	var ResponseTimeHeight = $("#ResponseTime").height();	
+    var contentHeight = (bodyHeight - headerHeight - footerHeight - ResponseTimeHeight);
+	var coordinateTop = (contentHeight-120)*0.20;
+    $("#Content").css("height",contentHeight);
+	$("#Coordinates").css("top",coordinateTop);
+});
 
-	if (watchID !== null) {
-
-		navigator.geolocation.clearWatch(watchID);
-		watchID = 
-		null;
-
-		document.getElementById('cur_position').innerHTML = "";
-		document.getElementById('map').style.display = 'none';
-
-	}
+function format_time(date_obj) { 
+   // formats a javascript Date object into a 12h AM/PM time string 
+   var hour = date_obj.getHours(); 
+   var minute = date_obj.getMinutes(); 
+   var amPM = (hour > 11) ? "pm" : "am"; 
+   if(hour > 12) { 
+     hour -= 12; 
+  } else if(hour == 0) { 
+     hour = "12"; 
+   } 
+   if(minute < 10) { 
+     minute = "0" + minute; 
+   } 
+   return hour + ":" + minute + amPM; 
+ } 
+ 
+function format_date(date_obj) { 
+   // formats a javascript Date object mm/dd/yyyy string
+   return (date_obj.getMonth() + 1) + "/" + date_obj.getDate() + "/" + date_obj.getFullYear();
 }
-var wsuccess = function(pos) { 
-
-	var map = document.getElementById('map');
-	map.style.display = 'block';
-	var mapwidth = 270; 
-	var mapheight = 210; 
-	var key = "AIzaSyARWwL4grkK_PgfLZg904DRNwfXmW0G_ks";
-	map.src = 
-	"http://maps.googleapis.com/maps/api/staticmap?center=" + 
-	pos.coords.latitude + "," + pos.coords.longitude + 
-	"&zoom=13&size=" + mapwidth + "x" + mapheight + "&maptype=satellite&markers=color:green%7C" +
-	pos.coords.latitude + "," + pos.coords.longitude +
-	"&key=" + key;
-
-};
-
-var wfail = function(error) { 
-	document.getElementById('cur_position').innerHTML = "Error getting geolocation: " + error.code;
-	console.log("Error getting geolocation: code=" + error.code + " message=" + error.message);
-};
-
-var toggleWatchPosition = function() { 
-
-	if (watchID) {
-		console.log("Stopped watching position");
-		clearWatch(); 
-		// sets watchID = null; 
-	} 
-	else { 
-
-		document.getElementById('map').style.display = 'none';
-		document.getElementById('cur_position').innerHTML = "Watching geolocation . . .";
-		console.log("Watching geolocation . . .");
-		var options = { frequency: 3000, maximumAge: 5000, timeout: 5000, enableHighAccuracy: true };
-		watchID = navigator.geolocation.watchPosition(wsuccess, wfail, options);
-	}
-};
