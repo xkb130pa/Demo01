@@ -14,7 +14,7 @@ var ScanCallback = function() {
 		$("#Coordinates").css("visibility","visible");		
 		$("#Latitude").html(Math.round(1000*latitude)/1000);
 		$("#Longitude").html(Math.round(1000*longitude)/1000);
-		$("#Accuracy").html(accuracy);
+		$("#Accuracy").html(Math.round(10*3.28*accuracy)/10 + 'ft');
 		
 		// Store code for use next time
 		//window.localStorage.setItem("code", code);
@@ -106,7 +106,8 @@ var ScanCallback = function() {
 	
 	
 	$("#Status").html("Retrieving Geolocation from your device...");
-	navigator.geolocation.getCurrentPosition(success, fail);
+	navigator.geolocation.getCurrentPosition(success, fail,
+	  {maximumAge:300000, timeout:10000, enableHighAccuracy: true});
 };
 
 // Capture pressing the GO button
