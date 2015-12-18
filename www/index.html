@@ -194,23 +194,25 @@
     <div id="Header">
       <h3>Proximity Scanner</h3>
     </div>
-	<div id="Version">Ver 0.10</div>
+	<div id="Version">Ver 0.20</div>
     <div id="Content">
 		<div id="Security">
-		  <p id="Directions">Please enter your security code.  Then press the button.</p>
-		  <div style="width:100%; text-align:center;">
-			<span style="font-weight:bold;">Security Code&nbsp;</span><input id="Code" Value="" style="width:6em;"/>
+		<p id="Directions">Please enter your security code.  Then press the button.</p>
+		<div style="width:100%; text-align:center;">
+			<span style="font-weight:bold;">Security Code&nbsp;&nbsp;</span><input id="Code" Value="" style="width:6em;"/>
 		  </div>
 		</div> 
 		
 		<div id="Center" style="text-align:center;">
 			<div id="ResponseBlock">
 				<div id="Response"></div>
-			</div> 
+		    <div id="ResponseDescription"></div>
+		</div> 
+
 			<a id="Button" class=".ui-btn-inner .ui-btn-text Z0" data-role="button" data-inline="true" onclick="ScanCallback();" ></a>
 		</div>
 		
-		<div id="ResponseDescription"></div>
+
 
 		<div id="Coordinates">Your Location:<br/>
 		 Latitude:<span id="Latitude">...</span>,&nbsp;
@@ -220,7 +222,7 @@
 
 	</div>
 	
-    <div id="ResponseTime">Last Checked 12/14/2015 5:07pm</div>
+    <div id="ResponseTime"></div>
 
     <div id="Status">Status bar</div>
   </body>
