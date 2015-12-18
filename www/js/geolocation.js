@@ -1,3 +1,4 @@
+
 var ScanCallback = function() {
 
 	var success = function(pos) { 
@@ -12,8 +13,8 @@ var ScanCallback = function() {
 		$("#Status").html("Coordinates retrieved...");
 
 		$("#Coordinates").css("visibility","visible");		
-		$("#Latitude").html(Math.round(1000*latitude)/1000);
-		$("#Longitude").html(Math.round(1000*longitude)/1000);
+		$("#Latitude").html(Math.round(1000*latitude)/1000 + ' W ')
+		$("#Longitude").html(Math.round(1000*longitude)/1000 + ' N') 
 		$("#Accuracy").html(Math.round(10*3.28*accuracy)/10 + 'ft');
 		
 		// Store code for use next time
@@ -32,8 +33,8 @@ var ScanCallback = function() {
 		// Compose the data feed URL
 		var URL = 'http://proximityscanner.com/Functions.svc/CheckProximity' +
         '?Code=' + code +
-        '&Latitude=' + latitude +
-        '&Longitude=' + longitude +
+        '&Latitude=' + latitude + 
+        '&Longitude=' + longitude + 
         '&Timestamp=' + Date.now();			
 
 		// Query the data and populate the table
@@ -46,11 +47,10 @@ var ScanCallback = function() {
 				
 				var timestamp = new Date();
 				var responsetime = format_date(timestamp) + ' ' + format_time(timestamp);
-				 
 
 				$("#ResponseBlock").css("visibility","visible");
 				$("#Security").css("visibility","hidden");
-			
+
 				if (zone==5) { 
 				 $("#Response").html("NO"); 
 				 $("#Response").css("background-color","#508a55");	
@@ -76,14 +76,14 @@ var ScanCallback = function() {
 				 $("#Response").html("NO"); 
 				 $("#Response").css("background-color","#87b388");
 				 $("#Button").removeClass("Z0").removeClass("Z1").addClass("Z2").removeClass("Z3").removeClass("Z4").removeClass("Z5");				
-				 $("#ResponseDescription").html("The nearest Cortese site is between 100 and 500 feet from your location"); 
+				 $("#ResponseDescription").html("The nearest Cortese site is between 200 and 500 feet from your location"); 
 				 $("#Status").html("Scan Completed");	
 				}
 				else if (zone==1) {
 				 $("#Response").html("YES"); 
 				 $("#Response").css("background-color","red");
 				 $("#Button").removeClass("Z0").addClass("Z1").removeClass("Z2").removeClass("Z3").removeClass("Z4").removeClass("Z5");				
-				 $("#ResponseDescription").html("There is a Cortese site within 100 feet of your location."); 
+				 $("#ResponseDescription").html("There is a Cortese site within 200 feet of your location."); 
 				 $("#Status").html("Scan Completed");	
 				}
 				else{
@@ -96,10 +96,12 @@ var ScanCallback = function() {
 			    $("#ResponseTime").html("Last Checked " + responsetime); 
 			})
 			.fail(function (jqxhr, textStatus, error) {
+				var timestamp = new Date();
+				var responsetime = format_date(timestamp) + ' ' + format_time(timestamp);			
 				$("#Security").css("visibility","visible");
 				$("#ResponseDescription").html("");
 				$("#ResponseBlock").css("visibility","hidden");
-				$("#Status").html(error)
+				$("#Status").html(error.message)
 			    $("#ResponseTime").html("Last Checked " + responsetime); 				
 			});
 	}
