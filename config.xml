@@ -2,7 +2,7 @@
   <name>Proximity Scanner</name>
   <description>Scan For the Nearest Site</description>
   <author href="http://ProximityScanner.com" email="support@ProximityScanner.com">CH2M</author>
-  <content src="index.html"/>
+  <content src="www/index.html"/>
   <preference name="permissions" value="none"/>
   <preference name="orientation" value="default"/>
   <preference name="target-device" value="universal"/>
@@ -37,7 +37,7 @@
   <gap:plugin name="org.apache.cordova.network-information"/>
   <gap:plugin name="org.apache.cordova.splashscreen"/>
   <gap:plugin name="org.apache.cordova.vibration"/> -->
-  <icon src="icon.png"/>
+  <icon src="www/icon.png"/>
   <icon src="res/icon/android/icon-36-ldpi.png" gap:platform="android" gap:qualifier="ldpi"/>
   <icon src="res/icon/android/icon-48-mdpi.png" gap:platform="android" gap:qualifier="mdpi"/>
   <icon src="res/icon/android/icon-72-hdpi.png" gap:platform="android" gap:qualifier="hdpi"/>
