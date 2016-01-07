@@ -11,14 +11,15 @@ var ScanCallback = function() {
 		latitude = pos.coords.latitude;
 		longitude =  pos.coords.longitude;
 		var accuracy =  pos.coords.accuracy;
-		
-		$("#Status").html("Coordinates retrieved...");
+
+		$("#Status").html("Coordinates retrieved.");
 
 		$("#Coordinates").css("visibility","visible");		
 		$("#Latitude").html(Math.round(100000*latitude)/100000 + ' &#176;W ')
 		$("#Longitude").html(Math.round(100000*longitude)/100000 + ' &#176;N') 
 		$("#Accuracy").html(Math.round(10 * 3.28 * accuracy) / 10 + ' ft');
-		
+
+    
 	    // Show the disclaimer
 		if (3.28 * accuracy > 500) {
 		    $("#AccuracyAlert").html("The geolocation accuracy reported from your mobile device is poor.  Are you outside with clear visibility? Please attempt scanning again at a new location.")
@@ -31,49 +32,62 @@ var ScanCallback = function() {
 		else {
 		scanProximity();
 		}
-    };
-			
-	var fail = function(error) {  	// when debugging report error.message
+	};
+	
+	var fail = function(error) {
 		$("#Coordinates").css("visibility","hidden");		
 		$("#Status").html("Error getting geolocation. Do you have GPS enabled?");
-
+		// when debugging report error.message
 	};
 	
 	
-	$("#Status").html("Retrieving Geolocation from your device...");
-	navigator.geolocation.getCurrentPosition(success, fail,
+	$("#Status").html("Retrieving Geolocation from your device.");
+	
+	var inputLatitude = $("#InputLatitude").val();
+	var inputLongitude = $("#InputLongitude").val();
+	
+	 if ( inputLatitude=="" && inputLongitude=="") {
+		// Get the coordatinates automatically through the browser
+		navigator.geolocation.getCurrentPosition(success, fail,
 	  {maximumAge:0, timeout:15000, enableHighAccuracy: true});
+	 } else {
+	   // Get the coordinates from the input form
+	   $("#Coordinates").css("visibility","hidden");
+	   latitude=inputLatitude;
+	   longitude=inputLongitude;
+	   scanProximity();
+	  }
+	
 };
 
-// Capture pressing the GO button
-$('#Code').keypress(function(e) {
-            var key = (e.keyCode ? e.keyCode : e.which);
-            if ( (key==13) || (key==10)) { ScanCallback(); }
-});
-    
-		
+
 var scanProximity = function () {
 
 	var securityCode = $("#Code").val();
 	
-		// Compose the data feed URL
-		var URL = 'http://proximityscanner.com/Functions.svc/CheckProximity' +
-        '?Code=' + securityCode +
-        '&Latitude=' + latitude + 
-        '&Longitude=' + longitude + 
-        '&Timestamp=' + Date.now();			
+	// Compose the data feed URL
+	// http://proximityscanner.com/
+	// ../Functions.svc/CheckProximity
+	// http://localhost:49631/Functions.svc/CheckProximity
+	var URL = '../Functions.svc/CheckProximity' +
+	'?Code=' + securityCode +
+	'&Latitude=' + latitude +
+	'&Longitude=' + longitude +
+	'&Timestamp=' + Date.now();			
 
-		// Query the data and populate the table
-		$.getJSON(URL)
-			.done(function (data) {
-			    var message = data.Message;
-				var distance = data.Distance;
-				var site = data.Site;
-				var zone=data.Zone;
-				var disclaimer = data.Disclaimer;
-				var status = data.Status;
-				var timestamp = new Date();
-				var responsetime = format_date(timestamp) + ' ' + format_time(timestamp);
+	// Query the data and populate the table
+	$.getJSON(URL)
+		.done(function (data) {
+		
+			var message = data.Message;
+			var distance = data.Distance;
+			var site = data.Site;
+			var zone=data.Zone;
+			var disclaimer = data.Disclaimer;
+			var status = data.Status;
+			var timestamp = new Date();
+			var responsetime = format_date(timestamp) + ' ' + format_time(timestamp);
+
 
 			if ($(".ui-page-active .ui-popup-active").length == 0) {
 			 // Other popups are not open
@@ -81,30 +95,26 @@ var scanProximity = function () {
 				// Disclaimer 
 
 				// Define the disclaimer
-				if (disclaimer==null) {
-				 $("#DisclaimerText").html("This tool and information obtained from it are for exclusive use by PG&E employees and contractors. <BR><BR>The Proximity Scanner is a tool to help PG&E Employees and Contractors determine if clean vault water may be discharged to land in certain locations and is to be used in conjunction with the VDR form as part of the vault dewatering procedure.");
-				} else {
-				 $("#DisclaimerText").html(disclaimer); 
+				if (disclaimer != null) {
+					// replace the default text built into the app
+					$("#DisclaimerText").html(disclaimer);
 				}
+
 				// Show the disclaimer
 				if (disclaimerShown == null) {
 					$("#DisclaimerDialog").popup("open")
 					disclaimerShown = 'done';
 				}
-			}
-			
-				// Hide the security code since it only needs to be entered once
-				//$("#Security").css("display","none");
-				$("#Security").css("visibility","hidden");
-				$("#Security").css("height","50px");
 
-				
-				// Unhide the response block
-				$("#ResponseBlock").css("visibility","visible");
-				
-				// Remove button text
-				$('#Button').html('');
-						
+
+			
+			}
+			// Unhide the response block
+			$("#ResponseBlock").css("visibility","visible");
+			
+			// Remove button text
+			$('#Button').html('');
+					
 			// Set the button image, Yes/NO response, response text, and status
 			if (zone==5) { 
 			 $("#Response").html("NO"); 
@@ -166,22 +176,14 @@ var scanProximity = function () {
 }
 
 $(document).ready(function(){   
-/*
-    var bodyHeight = $(document).height();
-    var headerHeight = $("#Header").height()
-	var footerHeight = $("#Status").height();
-	var ResponseTimeHeight = $("#ResponseTime").height();	
-    var contentHeight = (bodyHeight - headerHeight - footerHeight - ResponseTimeHeight);
-	var coordinateTop = (contentHeight-120)*0.20;
-    $("#Content").css("height",contentHeight);
-	$("#Coordinates").css("top",coordinateTop);
-	*/
 
 	// Create callback for the accuracy pop
 	$( "#AccuracyAlertDialog" ).bind({
 	   popupafterclose: function(event, ui) { scanProximity(); }
 	});
+
 });
+
 
 
 // Auxillary Functions
@@ -206,3 +208,4 @@ function format_date(date_obj) {
    // formats a javascript Date object mm/dd/yyyy string
    return (date_obj.getMonth() + 1) + "/" + date_obj.getDate() + "/" + date_obj.getFullYear();
 }
+
