@@ -93,17 +93,11 @@ var scanProximity = function () {
 				}
 			}
 			
-				// Hide the security code since it only needs to be entered once
-				//$("#Security").css("display","none");
-				$("#Security").css("visibility","hidden");
-				$("#Security").css("height","50px");
-
-				
-				// Unhide the response block
-				$("#ResponseBlock").css("visibility","visible");
-				
-				// Remove button text
-				$('#Button').html('');
+			// Unhide the response block
+			$("#ResponseBlock").css("visibility","visible");
+			
+			// Remove button text
+			$('#Button').html('');
 						
 			// Set the button image, Yes/NO response, response text, and status
 			if (zone==5) { 
@@ -142,16 +136,22 @@ var scanProximity = function () {
 			 if (status==null) { $("#Status").html("Scan Completed.");} else { $("#Status").html(status); }	
 			}
 			else{
-			 if (response="Invalid Security Code") { 
-			   $("#Security").css("visibility","visible"); 
-			   $("#Disclaimer").css("display","none");	
-			 }
+
 			 $("#ResponseBlock").css("visibility","hidden");
 			 if (message==null) { $("#ResponseDescription").html("");} else { $("#ResponseDescription").html(message); }			 
 			 $("#Button").addClass("Z0").removeClass("Z1").removeClass("Z2").removeClass("Z3").removeClass("Z4").removeClass("Z5");				
 			 if (status==null) { $("#Status").html("Scan Completed.");} else { $("#Status").html(status); }						 
 			}
 			$("#ResponseTime").html("Last Checked " + responsetime); 
+			
+
+		 	// Hide the security code since it only needs to be entered once
+			if (status=="Invalid Security Code.") { 
+				$("#Security").css("visibility","visible"); 
+			 } else {
+				$("#Security").css("visibility","hidden");
+				$("#Security").css("height","50px");
+			 }
 		})
 		.fail(function (jqxhr, textStatus, error) {
 			var timestamp = new Date();

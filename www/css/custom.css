@@ -71,6 +71,7 @@ span {
  display:inline-block;
  width:5em;
  padding-bottom:3px;
+ border: solid 1px gray;
 }
 
 #ResponseTime {
@@ -148,7 +149,7 @@ span {
 	margin:0px !important;
 }
 
-#Button .ui-btn-inline {
+.ui-btn-inline {
 	margin-right:0px !important;
 }
 
@@ -159,7 +160,7 @@ span {
 	border: 2px solid black !important;  
 	background-color: lightyellow !important; 
 	vertical-align:middle !important; 
-	
+	font-size:large; !important; 
 }
 .Z0 
 {
