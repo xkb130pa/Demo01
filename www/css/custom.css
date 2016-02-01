@@ -3,27 +3,50 @@ body {
  color:black;
  margin:0px;
 }
+#AccuracyAlertDialog {
+ max-width: 400px;
+ background-color:#cce5ff;
+ border: 1px solid #80bfff;
+}
+ #AccuracyAlertDialog  a.ui-btn{
+ border: 1px solid #80bfff;
+ }	
+#AccuracyAlert {
+ text-align:center;
+ vertical-align:middle;		 
+ color:DarkBlue;
+ font-weight:bold;
+ font-size:large;
+}	
 
 #DisclaimerDialog {
  max-width: 400px;
+ background-color:lightyellow;
+ border: 1px solid black;
 }
 #DisclaimerText {
  text-align:center;
  vertical-align:middle;		 
- color:red;
+ color:black;
  font-weight:bold;
  font-size:large;
 }	
-#AccuracyAlertDialog {
+	
+#SecurityCodeDialog {
  max-width: 400px;
-}	
-#AccuracyAlert {
+ background-color:#cce5ff;
+ border: 1px solid #80bfff;
+ }	
+ #SecurityCodeDialog  a.ui-btn{
+ border: 1px solid #80bfff;
+ }	
+#SecurityAlert {
  text-align:center;
  vertical-align:middle;		 
- color:darkmagenta;
+ color:DarkBlue;
  font-weight:bold;
  font-size:large;
-}	
+}
 #Version {
  position:absolute;
  /* top:0;  right:0;*/
@@ -162,6 +185,17 @@ span {
 	background-color: lightyellow !important; 
 	vertical-align:middle !important; 
 	font-size:large; !important; 
+}
+.ZM1 
+{
+  background-image: url(../img/ProximityRangeM1.png) !important;
+  background-repeat: no-repeat  !important;
+  background-position: center  !important; 
+  background-size: 40px 30px;		
+	height: 50px !important;
+	width: 240px !important;
+	border: 2px solid black !important;  
+	background-color: lightyellow !important;   
 }
 .Z0 
 {
